@@ -16,7 +16,7 @@ namespace AoC2025.Solvers
 
             foreach(string line in puzzleInputArray)
             {
-                Console.WriteLine($"Processing line: {line}");
+                //Console.WriteLine($"Processing line: {line}");
                 if(line[0] == 'L')
                     rotor -= int.Parse(line[1..]);
                 else
@@ -37,7 +37,7 @@ namespace AoC2025.Solvers
 
             foreach(string line in puzzleInputArray)
             {
-                Console.WriteLine($"Processing line: {line}");
+                //Console.WriteLine($"Processing line: {line}");
                 if(line[0] == 'L')
                     rotor -= int.Parse(line[1..]);
                 else
@@ -55,7 +55,7 @@ namespace AoC2025.Solvers
     {
         private int Size {get; set; }
         public int Value {get;set; }
-        public int Count {get;set; }
+        public Int64 Count {get;set; }
         public ElvishInt(int maxSize)
         {
             if (maxSize <= 0)
@@ -82,11 +82,11 @@ namespace AoC2025.Solvers
         public static ElvishInt operator +(ElvishInt left, int right)
         {
             int originalValue = left.Value;
-            int counts = 0;
+            Int64 counts = 0;
 
             if(right > 0)
             {
-                counts = (int)Math.Floor((decimal)(left.Value + right) / (left.Size +1));
+                counts = Convert.ToInt64(Math.Floor((decimal)(left.Value + right) / (left.Size +1)));
                 left.Count += counts;
                 left.Value = (left.Value + right) % (left.Size +1);
             }
@@ -95,7 +95,7 @@ namespace AoC2025.Solvers
                 var a = left.Value + right;
                 var b = a / (left.Size + 1);
                 var c = Math.Floor((decimal)b);
-                var d = Convert.ToInt32(c);
+                var d = Convert.ToInt64(c);
                 var e = Math.Abs(d);
                 counts = e;
 
@@ -114,7 +114,7 @@ namespace AoC2025.Solvers
                     left.Value = left.Size + 1 + left.Value;
             }
 
-            Console.WriteLine($"{originalValue} + {right} = {left.Value}, Counts: {counts}, Total Rotations: {left.Count}");
+            //Console.WriteLine($"{originalValue} + {right} = {left.Value}, Counts: {counts}, Total Rotations: {left.Count}");
 
             return left;
         }

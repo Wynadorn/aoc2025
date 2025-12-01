@@ -17,8 +17,8 @@ namespace AoC2025.Solvers
             Console.WriteLine(answerTwo);
         }
 
-        public abstract string SolvePartOne(string puzzleInput, string[] puzzleInputArray = null);
+        public abstract string SolvePartOne(string puzzleInput, string[] puzzleInputArray);
 
-        public abstract string SolvePartTwo(string puzzleInput, string[] puzzleInputArray = null);
+        public abstract string SolvePartTwo(string puzzleInput, string[] puzzleInputArray);
     }
 }

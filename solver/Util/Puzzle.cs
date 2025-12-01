@@ -47,9 +47,11 @@ namespace AoC2025.Util
         public Puzzle(int day)
         {
             _day = day;
+            Star1Answer = string.Empty;
+            Star2Answer = string.Empty;
         }
 
-        public string GetSolution(Star star = Star.Star1, string input = "", string[] inputArray = null)
+        public string GetSolution(Star star, string input, string[] inputArray)
         {
             if (string.IsNullOrWhiteSpace(input))
                 input = PuzzleInput;

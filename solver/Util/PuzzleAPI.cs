@@ -50,7 +50,7 @@ namespace AoC2025.Util
             if (day < 1 || day > 25)
                 throw new ArgumentOutOfRangeException(nameof(day), "Out of festive range exception");
 
-            string cacheFileName = Path.Combine(CACHE_ROOT, $"day{day}-input.txt");
+            string cacheFileName = Path.Combine(CACHE_ROOT, $"day{day}-input.txt.big");
 
             if (File.Exists(cacheFileName) && !forceRefresh)
                 return File.ReadAllText(cacheFileName);

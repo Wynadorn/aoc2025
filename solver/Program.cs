@@ -5,7 +5,7 @@ namespace AoC2025
 {
     internal class Program
     {
-        static bool ApplicationIsRunning = true;
+        //static bool ApplicationIsRunning = true;
         
         static void Main(string[] args)
         {
@@ -31,24 +31,24 @@ namespace AoC2025
         {
             return 1;
 
-            int day;
+            // int day;
 
-            Console.WriteLine("Which day would you like to solve?");
-            string? userInput = Console.ReadLine();
+            // Console.WriteLine("Which day would you like to solve?");
+            // string? userInput = Console.ReadLine();
 
-            while (!int.TryParse(userInput, out day))
-            {
-                Console.WriteLine("Invalid input, try again.");
-                userInput = Console.ReadLine();
-            }
+            // while (!int.TryParse(userInput, out day))
+            // {
+            //     Console.WriteLine("Invalid input, try again.");
+            //     userInput = Console.ReadLine();
+            // }
 
-            if (day < 1 || day > 25)
-            {
-                Console.WriteLine("Out of festive range exception");
-                return GetDayToSolve();
-            }
+            // if (day < 1 || day > 25)
+            // {
+            //     Console.WriteLine("Out of festive range exception");
+            //     return GetDayToSolve();
+            // }
 
-            return day;
+            // return day;
         }
     }
 }
