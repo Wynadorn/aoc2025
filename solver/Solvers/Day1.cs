@@ -2,6 +2,7 @@
 using System.IO.Pipelines;
 using System.Linq.Expressions;
 using System.Security.Cryptography;
+using System.Threading;
 
 namespace AoC2025.Solvers
 {
@@ -30,7 +31,23 @@ namespace AoC2025.Solvers
 
         public string SolvePartTwo(string puzzleInput, string[] puzzleInputArray)
         {
-            return "day 2 not implemented";
+            int count = 0;
+            ElvishInt rotor = new ElvishInt(99);
+            rotor.Value = 50;
+
+            foreach(string line in puzzleInputArray)
+            {
+                Console.WriteLine($"Processing line: {line}");
+                if(line[0] == 'L')
+                    rotor -= int.Parse(line[1..]);
+                else
+                    rotor += int.Parse(line[1..]);
+
+                if(rotor.Value == 0)
+                    count++;
+            }
+
+            return $"Count: {rotor.Count}, Final Value: {rotor.Value}, Total Rotations: {count}";
         }
     }
 
@@ -38,7 +55,7 @@ namespace AoC2025.Solvers
     {
         private int Size {get; set; }
         public int Value {get;set; }
-
+        public int Count {get;set; }
         public ElvishInt(int maxSize)
         {
             if (maxSize <= 0)
@@ -65,20 +82,39 @@ namespace AoC2025.Solvers
         public static ElvishInt operator +(ElvishInt left, int right)
         {
             int originalValue = left.Value;
+            int counts = 0;
 
             if(right > 0)
             {
+                counts = (int)Math.Floor((decimal)(left.Value + right) / (left.Size +1));
+                left.Count += counts;
                 left.Value = (left.Value + right) % (left.Size +1);
             }
             else if (right < 0)
             {
+                var a = left.Value + right;
+                var b = a / (left.Size + 1);
+                var c = Math.Floor((decimal)b);
+                var d = Convert.ToInt32(c);
+                var e = Math.Abs(d);
+                counts = e;
+
+                var f = (left.Value + right) % (left.Size +1);
+
+                if(originalValue > 0 && a < 0)
+                    counts += 1;
+
+                if(f == 0 && e == 0)
+                    counts += 1;
+
+                left.Count += counts;
                 left.Value = (left.Value + right) % (left.Size +1);
                 
                 if(left.Value < 0)
                     left.Value = left.Size + 1 + left.Value;
             }
 
-            Console.WriteLine($"{originalValue} + {right} = {left.Value}");
+            Console.WriteLine($"{originalValue} + {right} = {left.Value}, Counts: {counts}, Total Rotations: {left.Count}");
 
             return left;
         }
