@@ -29,7 +29,7 @@ namespace AoC2025
 
         private static int GetDayToSolve()
         {
-            return 1;
+            return 2;
 
             // int day;
 
