@@ -8,6 +8,7 @@ namespace AoC2025
         public static bool UseBig { get; private set; }
         public static bool Interactive { get; private set; }
         public static bool ForceRefresh { get; private set; }
+        public static bool PrintAll { get; private set; }
 
         private static bool ApplicationIsRunning = true;
         
@@ -15,6 +16,12 @@ namespace AoC2025
         {
             ParseArgs(args);
             
+            if (PrintAll)
+            {
+                PrintAllAndExit();
+                return;
+            }
+
             if (Interactive)
                 SolvePuzzlesInteractive();
             else
@@ -26,6 +33,55 @@ namespace AoC2025
             Interactive = args != null && Array.Exists(args, a => string.Equals(a, "-i", StringComparison.OrdinalIgnoreCase));
             UseBig = args != null && Array.Exists(args, a => string.Equals(a, "-big", StringComparison.OrdinalIgnoreCase));
             ForceRefresh = args != null && Array.Exists(args, a => string.Equals(a, "-refresh", StringComparison.OrdinalIgnoreCase));
+            PrintAll = args != null && Array.Exists(args, a => string.Equals(a, "-all", StringComparison.OrdinalIgnoreCase));
+        }
+
+        private static void PrintAllAndExit()
+        {
+            Console.WriteLine("Day   -Part 1-   -Part 2-");
+
+            for (int day = 1; day <= 25; day++)
+            {
+                try
+                {
+                    var type = Type.GetType($"AoC2025.Solvers.Day{day}", throwOnError: false);
+                    if (type == null)
+                        continue; // skip days without a solver implementation
+
+                    var solver = Activator.CreateInstance(type) as AoC2025.Solvers.ISolver;
+                    if (solver == null)
+                        continue;
+
+                    string rawInput = PuzzleAPI.GetPuzzleInput(day);
+                    string[] inputArray = rawInput.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+
+                    var puzzle = new Puzzle(day)
+                    {
+                        Star1Solver = (input, arr) => solver!.SolvePartOne(input, arr),
+                        Star2Solver = (input, arr) => solver!.SolvePartTwo(input, arr)
+                    };
+
+                    // Run both parts to measure durations
+                    _ = puzzle.GetSolution(Star.Star1, rawInput, inputArray);
+                    _ = puzzle.GetSolution(Star.Star2, rawInput, inputArray);
+
+                    string p1 = FormatDuration(puzzle.Star1Millis);
+                    string p2 = FormatDuration(puzzle.Star2Millis);
+
+                    Console.WriteLine($"{day,3}   {p1,8}   {p2,8}");
+                }
+                catch
+                {
+                    // On any failure (missing input, exceptions), silently skip to meet the no-extra-output requirement
+                    continue;
+                }
+            }
+        }
+
+        private static string FormatDuration(long millis)
+        {
+            var ts = TimeSpan.FromMilliseconds(millis);
+            return ts.ToString(@"mm\:ss\.ff");
         }
 
         private static void SolveTodaysPuzzleOrInteractiveFallback()
