@@ -59,7 +59,7 @@ namespace AoC2025.Util
         public static string GetPuzzleInput(int day)
         {
             if (day < 1 || day > 25)
-                throw new ArgumentOutOfRangeException(nameof(day), "Out of festive range exception");
+                throw new FestiveException($"Day {day} is out of festive range (1-25)");
 
             string cacheFileName = Path.Combine(CACHE_ROOT, $"day{day}-input.txt");
 
@@ -101,7 +101,7 @@ namespace AoC2025.Util
             if (!response.IsSuccessStatusCode)
             {
                 string errorContent = response.Content.ReadAsStringAsync().Result;
-                throw new Exception($"Failed to get puzzle input for day {day}. Status: {response.StatusCode}\nResponse: {errorContent}");
+                throw new FestiveException($"Failed to get puzzle input for day {day}. Status: {response.StatusCode}\nResponse: {errorContent}");
             }
             
             string? stringResult = response.Content.ReadAsStringAsync().Result;
@@ -117,7 +117,7 @@ namespace AoC2025.Util
             }
             else
             {
-                throw new Exception($"Unable to get puzzle input for day {day}.");
+                throw new FestiveException($"Unable to get puzzle input for day {day}.");
             }
         }
 
@@ -128,12 +128,12 @@ namespace AoC2025.Util
             if (!File.Exists(path))
             {
                 File.WriteAllText(path, string.Empty);
-                throw new FileNotFoundException($"'cookie.txt' not found in '{CACHE_ROOT}'");
+                throw new FestiveException($"'cookie.txt' not found in '{CACHE_ROOT}'");
             }
 
             string raw = File.ReadAllText(path).Trim();
             if (string.IsNullOrEmpty(raw))
-                throw new Exception($"'cookie.txt' in '{CACHE_ROOT}' is empty. Paste your AoC session token.");
+                throw new FestiveException($"'cookie.txt' in '{CACHE_ROOT}' is empty. Paste your AoC session token.");
 
             if (raw.StartsWith("session="))
                 raw = raw.Substring("session=".Length);
