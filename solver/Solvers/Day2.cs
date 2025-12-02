@@ -42,7 +42,7 @@ namespace AoC2025.Solvers
                 }
             }
 
-            return $"Sum is {sum}";
+            return sum.ToString();
         }
 
         public string SolvePartTwo(string puzzleInput, string[] puzzleInputArray)
@@ -94,7 +94,7 @@ namespace AoC2025.Solvers
                 }
             }
 
-            return $"Sum is {sum}";
+            return sum.ToString();
         }
     }
 }

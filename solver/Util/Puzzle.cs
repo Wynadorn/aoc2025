@@ -14,9 +14,9 @@ namespace AoC2025.Util
         public string PuzzleInput => GetPuzzleInput(Day);
         public string[] PuzzleInputArray => PuzzleInput.Split('\n');
 
-        private string GetPuzzleInput(int day, bool renewCache = false)
+        private string GetPuzzleInput(int day)
         {
-            return PuzzleAPI.GetPuzzleInput(day, forceRefresh: renewCache);
+            return PuzzleAPI.GetPuzzleInput(day);
         }
 
         public Func<string, string[], string> Star1Solver { get; set; } = (input, inputArray) => { return "No sovler set"; };

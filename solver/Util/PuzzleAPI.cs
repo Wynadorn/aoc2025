@@ -9,7 +9,7 @@ namespace AoC2025.Util
     {
         private static readonly string BASE_INPUT_URL = "https://adventofcode.com/2025/day/";
         private static readonly string CACHE_ROOT = @"C:\Src\usr\aoc\aoc2025\cache\";
-
+        
         public static void Solve(int day)
         {
             ISolver? solver;
@@ -32,7 +32,22 @@ namespace AoC2025.Util
             }
 
             string rawInput = GetPuzzleInput(day);
-            solver.Solve(rawInput);
+            // Wire solver parts into Puzzle for timing
+            var puzzle = new Puzzle(day)
+            {
+                Star1Solver = (input, arr) => solver!.SolvePartOne(input, arr),
+                Star2Solver = (input, arr) => solver!.SolvePartTwo(input, arr)
+            };
+
+            // Reuse the same parsed array for both stars (remove empty lines like ISolver does)
+            string[] inputArray = rawInput.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+
+            string star1Answer = puzzle.GetSolution(Star.Star1, rawInput, inputArray);
+            string star2Answer = puzzle.GetSolution(Star.Star2, rawInput, inputArray);
+            
+            // Output timing summary
+            Console.WriteLine(puzzle.Star1TimeString);
+            Console.WriteLine(puzzle.Star2TimeString);
             return;
         }
 
@@ -41,14 +56,23 @@ namespace AoC2025.Util
             Console.WriteLine($"Unable to find a solution for day {day}.");
         }
 
-        public static string GetPuzzleInput(int day, int star = 1, bool forceRefresh = false)
+        public static string GetPuzzleInput(int day)
         {
             if (day < 1 || day > 25)
                 throw new ArgumentOutOfRangeException(nameof(day), "Out of festive range exception");
 
-            string cacheFileName = Path.Combine(CACHE_ROOT, $"day{day}-input.txt.big");
+            string cacheFileName = Path.Combine(CACHE_ROOT, $"day{day}-input.txt");
 
-            if (File.Exists(cacheFileName) && !forceRefresh)
+            if (Program.UseBig)
+            {
+                string bigPath = cacheFileName + ".big";
+                if (File.Exists(bigPath))
+                    return File.ReadAllText(bigPath);
+                else
+                    throw new FestiveException($"Big input file for day {day} not found at '{bigPath}'");
+            }
+
+            if (File.Exists(cacheFileName) && !Program.ForceRefresh)
                 return File.ReadAllText(cacheFileName);
 
             var url = new Uri($"{BASE_INPUT_URL}{day}/input");
@@ -116,5 +140,12 @@ namespace AoC2025.Util
 
             return raw;
         }
+    }
+
+    [Serializable]
+    internal class FestiveException : Exception
+    {
+        public FestiveException(string? message) : base(message)
+        { }
     }
 }
