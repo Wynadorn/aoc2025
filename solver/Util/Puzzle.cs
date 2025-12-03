@@ -28,8 +28,8 @@ namespace AoC2025.Util
         public long Star1Ticks { get; private set; }
         public long Star2Ticks { get; private set; }
 
-        public string Star1TimeString => $"Solved day {Day} star 1 in {Star1Millis}ms ({Star1Ticks} ticks)! Answer {Star1Answer}.";
-        public string Star2TimeString => $"Solved day {Day} star 2 in {Star2Millis}ms ({Star2Ticks} ticks)! Answer {Star2Answer}.";
+        public string Star1TimeString => $"Solved day {Day} star 1 in {Star1Millis}ms ({Star1Ticks} ticks)! Answer: {Star1Answer}";
+        public string Star2TimeString => $"Solved day {Day} star 2 in {Star2Millis}ms ({Star2Ticks} ticks)! Answer: {Star2Answer}";
 
         public string Star1Answer { get; private set; }
         public string Star2Answer { get; private set; }
@@ -64,14 +64,12 @@ namespace AoC2025.Util
                 Star1Ticks = watch.ElapsedTicks;
                 Star1Millis = watch.ElapsedMilliseconds;
                 Star1Answer = answer;
-                Debug.WriteLine(Star1TimeString);
             }
             else
             {
                 Star2Ticks = watch.ElapsedTicks;
                 Star2Millis = watch.ElapsedMilliseconds;
                 Star2Answer = answer;
-                Debug.WriteLine(Star2TimeString);
             }
             
             return answer;
