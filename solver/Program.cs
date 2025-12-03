@@ -80,8 +80,9 @@ namespace AoC2025
 
         private static string FormatDuration(long millis)
         {
-            var ts = TimeSpan.FromMilliseconds(millis);
-            return ts.ToString(@"mm\:ss\.ff");
+            if (millis <= 0) return "0ms";
+            if (millis >= 1000000) return "999999ms";
+            return $"{millis}ms";
         }
 
         private static void SolveTodaysPuzzleOrInteractiveFallback()
