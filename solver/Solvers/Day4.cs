@@ -12,7 +12,7 @@ namespace AoC2025.Solvers
             int sum = 0;
             int roomX = puzzleInputArray[0].Length;
             int roomY = puzzleInputArray.Length;
-            RollOfPaper[,] room = new RollOfPaper[roomX,roomY];
+            RollOfPaper?[,] room = new RollOfPaper?[roomX,roomY];
 
             Console.WriteLine($"Room size is {roomX}x{roomY}");
 
@@ -25,12 +25,11 @@ namespace AoC2025.Solvers
                     if (charValue == '.')
                         continue;
 
-                    if(charValue != null)
-                        room[x,y] = new RollOfPaper(){location = new Point(x,y), roomRef = room};
+                    room[x,y] = new RollOfPaper(){location = new Point(x,y), roomRef = room};
                 }
             }
 
-            foreach(RollOfPaper roll in room)
+            foreach(RollOfPaper? roll in room)
             {
                 if(roll != null && roll.HasFewerThanFour())
                     sum++;
@@ -44,7 +43,7 @@ namespace AoC2025.Solvers
             int sum = 0;
             int roomX = puzzleInputArray[0].Length;
             int roomY = puzzleInputArray.Length;
-            RollOfPaper[,] room = new RollOfPaper[roomX,roomY];
+            RollOfPaper?[,] room = new RollOfPaper?[roomX,roomY];
 
             Console.WriteLine($"Room size is {roomX}x{roomY}");
 
@@ -57,8 +56,7 @@ namespace AoC2025.Solvers
                     if (charValue == '.')
                         continue;
 
-                    if(charValue != null)
-                        room[x,y] = new RollOfPaper(){location = new Point(x,y), roomRef = room};
+                    room[x,y] = new RollOfPaper(){location = new Point(x,y), roomRef = room};
                 }
             }
 
@@ -68,7 +66,7 @@ namespace AoC2025.Solvers
             {
                 previousSum = sum;
 
-                foreach(RollOfPaper roll in room)
+                foreach(RollOfPaper? roll in room)
                 {
                     if(roll != null && roll.HasFewerThanFour())
                     {
@@ -87,10 +85,12 @@ namespace AoC2025.Solvers
     public class RollOfPaper
     {
         public Point location {get;set;}
-        public RollOfPaper[,] roomRef {get;set;}
+        public RollOfPaper?[,]? roomRef {get;set;}
 
         public bool HasFewerThanFour()
         {
+            if (roomRef == null) return false;
+
             int count = 0;
 
             try{ if(roomRef[location.X-1,location.Y-1] != null) { count++;}}catch{}
