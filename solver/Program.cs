@@ -9,6 +9,7 @@ namespace AoC2025
         public static bool Interactive { get; private set; }
         public static bool ForceRefresh { get; private set; }
         public static bool PrintAll { get; private set; }
+        public static string ForcedDay { get; private set;}
 
         private static bool ApplicationIsRunning = true;
         
@@ -34,6 +35,7 @@ namespace AoC2025
             UseBig = args != null && Array.Exists(args, a => string.Equals(a, "-big", StringComparison.OrdinalIgnoreCase));
             ForceRefresh = args != null && Array.Exists(args, a => string.Equals(a, "-refresh", StringComparison.OrdinalIgnoreCase));
             PrintAll = args != null && Array.Exists(args, a => string.Equals(a, "-all", StringComparison.OrdinalIgnoreCase));
+            ForcedDay = args != null ? Array.Find(args, a => a.StartsWith("-day=", StringComparison.OrdinalIgnoreCase))?.Substring(5) ?? string.Empty : string.Empty;
         }
 
         private static void PrintAllAndExit()
@@ -87,17 +89,24 @@ namespace AoC2025
 
         private static void SolveTodaysPuzzleOrInteractiveFallback()
         {
-            var now = DateTime.Now;
+            if(!string.IsNullOrWhiteSpace(ForcedDay) && int.TryParse(ForcedDay, out int day))
+                PuzzleAPI.Solve(day);
 
-            if (now.Month == 12 && now.Day >= 1 && now.Day <= 25)
-            {
-                PuzzleAPI.Solve(now.Day);
-            }
             else
             {
-                Console.WriteLine("Out of festive range exception! Switching to interactive mode.");
-                SolvePuzzlesInteractive();
+                var now = DateTime.Now;
+
+                if (now.Month == 12 && now.Day >= 1 && now.Day <= 25)
+                {
+                    PuzzleAPI.Solve(now.Day);
+                }
+                else
+                {
+                    Console.WriteLine("Out of festive range exception! Switching to interactive mode.");
+                    SolvePuzzlesInteractive();
+                }
             }
+            
 
             Console.WriteLine();
         }
